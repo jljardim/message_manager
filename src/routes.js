@@ -1,22 +1,23 @@
-import { BrowserRouter,Switch, Route } from "react-router-dom";
+import { Switch, Route  } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
+import Message from "./pages/Messages";
+import Register from "./pages/Register";
 
 
 const Routes = () => {
     return (
-        <BrowserRouter>
         <Switch>
             <Route path="/" exact>
                 <Dashboard />
             </Route>
             <Route path="/register" >
-                <Dashboard />
+                <Register />
             </Route>
             <Route path="/message" >
-                <Dashboard />
+                <Message />
             </Route>
         </Switch>
-        </BrowserRouter>
+
     );
 }
 
