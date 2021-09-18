@@ -1,5 +1,7 @@
 body {
-    background: #f0f3f554;
+    background: rgb(236, 236, 241);
+    margin: 0%;
+    padding: 0%;
 
 }
 .container_header {
@@ -24,14 +26,21 @@ body {
 }
 .container_actions {
     display: flex;
+    height: 100px;
     align-items: center;
     justify-self: left;
-    gap: 800px;
+    gap: 580px;
+    font-size: 30px;
+    border: #000 solid 2px;
 
 }
-.div_actions_button {
-    justify-items: auto;
+.div_actions_button  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
     margin: 0%;
+    gap: 10px;
 }
 .table tr th {
     width: 500px;
@@ -46,4 +55,35 @@ body {
 }
 .Link {
     color: blue;
+}
+.container_cadastro {
+    display: flex;
+    flex-direction: column;
+    width: 930px;
+    border:  1px solid  green;
+    padding: 80px;
+    margin:150px;
+}
+.cadastro_btn2 {
+  background: blue;
+}
+.container_dados {
+    display: flex;
+    gap: 150px;
+    border:  1px solid  blue;
+    
+}
+.campo_cadastro {
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    gap: 10px;
+    margin: 20px;
+    border: yellow solid 2px;
+}
+.campo_cadastro_textarea {
+    display: flex;
+    flex-direction: column;
+    border: #F0F solid 2px;
+   
 }
