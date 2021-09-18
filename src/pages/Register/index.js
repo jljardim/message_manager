@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 import Select from "../../components/Select";
 import api from "../../services/api";
+import Swal from "sweetalert2";
+
+
 
 const Register = () => {
   const [optionSelectedGatilho, setOptionSelectedGatilho] = useState('');
   const [optionSelectedCanal, setOptionSelectedCanal] = useState('');
-  const [optionsTriggers, setOptionsTriggers] = useState([]);
-  const [optionsChannels, setOptionsChannels] = useState([]);
+  const [getOptionsTriggers, setGetOptionsTriggers] = useState([]);
+  const [getOptionsChannels, setGetOptionsChannels] = useState([]);
   const [timer, setTimerSelected] = useState("");
   const [messages, setMessageSelected] = useState("");
   const history = useHistory();
@@ -21,16 +25,21 @@ const Register = () => {
       const response = await api.get("/triggers");
       console.log("triggers",response.data);
 
-      const optionsFomattedTriggers = response.data.map(item => {
+      const getOptionsFomattedTriggers = response.data.map(item => {
         return {
           label: item.name,
           value: item.name,
         };
       })
 
-      setOptionsTriggers(optionsFomattedTriggers);
+      setGetOptionsTriggers(getOptionsFomattedTriggers);
     } catch (error) {
-      console.log(error);
+          toast.error(
+            "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
+            {
+              position: toast.POSITION.BOTTOM_CENTER,
+            }
+          );
     }
   }; 
 
@@ -43,16 +52,22 @@ const Register = () => {
       const response = await api.get('/channels');
       console.log("channels", response.data);
 
-      const optionsFomattedChannels = response.data.map(item =>{
+      const getOptionsFomattedChannels = response.data.map(item =>{
         return {
           label: item.name,
           value: item.name,
         };
       })
-      setOptionsChannels(optionsFomattedChannels);
+      setGetOptionsChannels(getOptionsFomattedChannels);
 
     } catch (error) {
-      console.log(error);
+          toast.error(
+            "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
+            {
+              position: toast.POSITION.BOTTOM_CENTER,
+            }
+          );
+
     }
   };
 
@@ -70,13 +85,23 @@ const Register = () => {
         handlePostMessages();
   }, [])
 
-  const handleChangeEventGatilho = (event) => {
+  const handleOnChangeGatilho = (event) => {
     setOptionSelectedGatilho(event.target.value)
   }
 
-  const handleChangeEventCanal = (event) => {
+  const handleOnChangeCanal = (event) => {
     setOptionSelectedCanal(event.target.value);
    };
+      
+   const notifySwal = (message) => {
+     Swal.fire({
+        icon: "error",
+        title: "Mensagem",
+        text: message,
+        footer: "<Criado por zap system",
+    });
+  };
+      
 
   return (
     <>
@@ -86,7 +111,12 @@ const Register = () => {
           <div className="div_actions_button">
             <button onClick={() => history.goBack()}>Voltar</button>
 
-            <button className="cadastro_btn2">Cadastrar</button>
+            <button
+              className="cadastro_btn2"
+              onClick={() => notifySwal("jjdjdjdjdjjdjdjdjdjdjdj")}
+            >
+              Cadastrar
+            </button>
           </div>
         </div>
 
@@ -95,8 +125,8 @@ const Register = () => {
             <Select
               titleLabel="Gatilho:"
               value={optionSelectedGatilho}
-              options={optionsTriggers}
-              onChange={handleChangeEventGatilho}
+              options={getOptionsTriggers}
+              onChange={handleOnChangeGatilho}
             />
           </div>
 
@@ -104,8 +134,8 @@ const Register = () => {
             <Select
               titleLabel="Canal:"
               value={optionSelectedCanal}
-              options={optionsChannels}
-              onChange={handleChangeEventCanal}
+              options={getOptionsChannels}
+              onChange={handleOnChangeCanal}
             />
           </div>
 
@@ -125,6 +155,7 @@ const Register = () => {
           ></textarea>
         </div>
       </div>
+      <ToastContainer autoClose={false} />
     </>
   );
 };
