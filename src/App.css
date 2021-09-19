@@ -24,15 +24,34 @@ body {
     /* justify-content: right; */
 
 }
-.container_actions {
+.container_actions_cadastro {
     display: flex;
-    height: 100px;
+    /* flex-direction: column; */
+    height: 30px;
     align-items: center;
     justify-self: left;
-    gap: 580px;
+    gap: 100px;
     font-size: 30px;
     border: #000 solid 2px;
 
+}
+.container_actions_messages {
+    display: flex;
+    flex-direction: column;
+    height: 30px;
+    align-items: center;
+    justify-self: left;
+    gap: 100px;
+    font-size: 30px;
+    border: #000 solid 2px;
+
+}
+.div_h2_message {
+    display: flex;
+    justify-content: right;
+    gap: 600px;
+    border: blue 2px solid;
+    margin: 30px;
 }
 .div_actions_button  {
     display: flex;
@@ -41,6 +60,9 @@ body {
     width: 100px;
     margin: 0%;
     gap: 10px;
+}
+.btn2_messages {
+    width: 80px;
 }
 .table tr th {
     width: 500px;
@@ -83,7 +105,11 @@ body {
 }
 .campo_cadastro_textarea {
     display: flex;
+    height: 100px;
     flex-direction: column;
     border: #F0F solid 2px;
    
+}
+.campo_cadastro_textarea textarea {
+    height: 150px;
 }

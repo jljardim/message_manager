@@ -5,7 +5,7 @@
       "channel": "sms",
       "trigger": "abertura_conta",
       "timer": "15:00",
-      "message": " Na correria do dia a dia a Oi Conta Zap te ajuda a lembrar de algumas coisinhas! Ja conseguiu pagar seu boleto? Se sim, desconsidere a mensagem"
+      "message": " Ok realizado com  sucesso"
     },
     {
       "id": 21,
@@ -34,6 +34,34 @@
       "trigger": "fez_pix",
       "timer": "2323",
       "message": "23232323"
+    },
+    {
+      "channel": "whatsapp",
+      "trigger": "deletou_chave_pix",
+      "timer": "11:00",
+      "message": "Parabéns chave pix cadastrado com sucesso !!",
+      "id": 1631313726739
+    },
+    {
+      "channel": "email",
+      "trigger": "fex_transferencia_outro_banco",
+      "timer": "12:00",
+      "message": "Recebemos sua solicitação de transferencia dentro e alguns instantes você recebera um email ",
+      "id": 1631313726740
+    },
+    {
+      "channel": "sms",
+      "trigger": "recarregou_celular",
+      "timer": "16:50",
+      "message": "Recarga no valor de 20.00",
+      "id": 1631313726741
+    },
+    {
+      "channel": "whatsapp",
+      "trigger": "fez_pix",
+      "timer": "16:50",
+      "message": "Pix com sucesso",
+      "id": 1631313726742
     }
   ],
   "channels": [

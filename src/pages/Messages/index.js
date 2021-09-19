@@ -5,7 +5,6 @@ import api from "../../services/api";
 import Swal from "sweetalert2";
 import Select from "../../components/Select";
 
-
 const Message = () => {
   const [gatilhoSelected, setGatilhoSelected] = useState("");
   const [canalSelected, setCanalSelected] = useState("");
@@ -14,25 +13,9 @@ const Message = () => {
   const [getOptionsChannels, setGetOptionsChannels] = useState([]);
   const [filter, setFilter] = useState([]);
 
-  console.log("Quem é esse cara aqui", getOptionsChannels);
-  console.log("oque ta acontecendo no filterhandle", filter);
-  
-
-
-  const notifySwalMessages = () => {
-    Swal.fire({
-      icon: "info",
-      title: "Mensagem",
-      text: {handleSubmit},
-      footer: "<Criado por zap system",
-    });
-  };
-
   const hangleGetMessagesTriggers = async () => {
     try {
       const response = await api.get("/triggers");
-      console.log("resultados da messages", response.data);
-
       const getTriggersFormatted = response.data.map((item) => {
         return {
           value: item.name,
@@ -41,73 +24,21 @@ const Message = () => {
       });
       setGetOptionsTriggers(getTriggersFormatted);
     } catch (error) {
-      toast.error(
-        "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
-        {
-          position: toast.POSITION.BOTTOM_CENTER,
-        }
-      );
+       Swal.fire({
+         icon: "error",
+         title: "Mensagem",
+         text: "Error 404 /Triggers tente novamente ou contate o suporte",
+       });
     }
-   
   };
 
   useEffect(() => {
     hangleGetMessagesTriggers();
   }, []);
-/* 
-  const getMessageofMessages = async() => {
-      try {
-        const response = await api.get('/messages');
 
-        console.log("sou o log gte messages", response.data);
-        setFilter(response.data);
-
-        const getValueMassage = filter.map(item => {
-          return {
-            value: item.message,
-          }
-        })
-        
-      } catch (error) {
-             toast.error(
-               "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
-               {
-                 position: toast.POSITION.BOTTOM_CENTER,
-               }
-             );
-      } 
-    
-    }
-useEffect(() =>{
-  getMessageofMessages();
-}, []) */
-
-  const handleSubmit = async() => {
-    try {
-        const response = await api.get("/messages?message=23232323");
-    console.log("ola agora sou handleSumit", response.data);
-    setFilter(response.data)
-  
-    } catch (error) {
-            toast.error(
-        "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
-        {
-          position: toast.POSITION.BOTTOM_CENTER,
-        }
-      );
-    }
-  };
-
-  useEffect(() => {
-    handleSubmit();
-  }, []);
-  
- 
   const handleGetMessagesChannels = async () => {
     try {
       const response = await api.get("/channels");
-      console.log("resultados da messages", response.data);
-
       const getChannelsFormatted = response.data.map((item) => {
         return {
           label: item.name,
@@ -116,12 +47,11 @@ useEffect(() =>{
       });
       setGetOptionsChannels(getChannelsFormatted);
     } catch (error) {
-      toast.error(
-        "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
-        {
-          position: toast.POSITION.BOTTOM_CENTER,
-        }
-      );
+        Swal.fire({
+          icon: "error",
+          title: "Mensagem",
+          text: "Error 404 /Channels tente novamente ou contate o suporte",
+        });
     }
   };
 
@@ -137,61 +67,103 @@ useEffect(() =>{
     setCanalSelected(event.target.value);
   };
 
+  const notifySwalMessages = (message) => {
+    Swal.fire({
+      icon: "info",
+      title: "Mensagem",
+      text: message,
+      footer: "<Criado por zap system",
+    });
+  };
+
+  const handleOnClick = async () => {
+    try {
+      const response = await api.get(
+        `/messages?channel_like=${canalSelected}&trigger_like=${gatilhoSelected}&timer_like=${timerSelected}`
+      );
+      setFilter(response.data);
+    } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Mensagem",
+            text: "Error 404 /Filters tente novamente ou contate o suporte",
+          });
+    }
+  };
+  useEffect(() => {
+    handleOnClick();
+  }, []);
+
   return (
     <>
-      <div className="container_actions">
-        <h2>Messages</h2>
-        <div className="div_actions_button">
-          <button>Pesquisar</button>
-          <Link to="/register">
-            <button>Nova mensagem</button>
-          </Link>
+      <div className="container_actions_messages">
+        <div className="div_h2_message">
+          <h2>Messages</h2>
+          <div className="div_actions_button">
+            <button onClick={handleOnClick} className="btn2_messages">
+              Pesquisar
+            </button>
+            <Link to="/register">
+              <button>Nova mensagem</button>
+            </Link>
+          </div>
+        </div>
+
+        <div className="container_dados">
+          <div className="campo_cadastro">
+            <Select
+              titleLabel="Gatilho"
+              value={gatilhoSelected}
+              options={getOptionsTriggers}
+              onChange={handleOnChangeGatilho}
+            />
+          </div>
+          <div className="campo_cadastro">
+            <Select
+              titleLabel="Canal:"
+              value={canalSelected}
+              options={getOptionsChannels}
+              onChange={handleOnChangeCanal}
+            />
+          </div>
+
+          <div className="campo_cadastro">
+            <label>Timer:</label>
+            <input
+              value={timerSelected}
+              onChange={(event) => setTimerSelected(event.target.value)}
+            />
+          </div>
+        </div>
+        <div>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gatilho</th>
+                <th>Canal</th>
+                <th>Timer</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filter.map((item) => {
+                return (
+                  <tr>
+                    <td>{item.trigger}</td>
+                    <td>{item.channel}</td>
+                    <td>{item.timer}</td>
+                    <td>
+                      <button onClick={() => notifySwalMessages(item.message)}>
+                        ver mensagem
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
-      <div>
-        <Select
-          titleLabel="Gatilho"
-          value={gatilhoSelected}
-          options={getOptionsTriggers}
-          onChange={handleOnChangeGatilho}
-        />
-
-        <Select
-          titleLabel="Canal:"
-          value={canalSelected}
-          options={getOptionsChannels}
-          onChange={handleOnChangeCanal}
-        />
-
-        <label>Timer:</label>
-        <input
-          value={timerSelected}
-          onChange={(event) => setTimerSelected(event.target.value)}
-        />
-      </div>
-
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Gatilho</th>
-            <th>Canal</th>
-            <th>Timer</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{gatilhoSelected}</td>
-            <td>{canalSelected}</td>
-            <td></td>
-            <td>
-              <button onClick={notifySwalMessages}>Ver mensagem</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <ToastContainer autoClose={false} />
     </>
   );
 };

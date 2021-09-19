@@ -1,120 +1,105 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { ToastContainer, toast } from "react-toastify";
 import Select from "../../components/Select";
 import api from "../../services/api";
 import Swal from "sweetalert2";
 
-
-
 const Register = () => {
-  const [optionSelectedGatilho, setOptionSelectedGatilho] = useState('');
-  const [optionSelectedCanal, setOptionSelectedCanal] = useState('');
+  const [optionSelectedGatilho, setOptionSelectedGatilho] = useState("");
+  const [optionSelectedCanal, setOptionSelectedCanal] = useState("");
   const [getOptionsTriggers, setGetOptionsTriggers] = useState([]);
   const [getOptionsChannels, setGetOptionsChannels] = useState([]);
   const [timer, setTimerSelected] = useState("");
   const [messages, setMessageSelected] = useState("");
   const history = useHistory();
 
-  console.log(timer);
-  console.log(messages);
-
-
   const handleGetOptionsTriggers = async () => {
     try {
       const response = await api.get("/triggers");
-      console.log("triggers",response.data);
-
-      const getOptionsFomattedTriggers = response.data.map(item => {
+      const getOptionsFomattedTriggers = response.data.map((item) => {
         return {
           label: item.name,
           value: item.name,
         };
-      })
-
+      });
       setGetOptionsTriggers(getOptionsFomattedTriggers);
     } catch (error) {
-          toast.error(
-            "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
-            {
-              position: toast.POSITION.BOTTOM_CENTER,
-            }
-          );
+     Swal.fire({
+       icon: "error",
+       title: "Mensagem",
+       text: "Erro 404 /Triggers contate o suporte",
+     });
     }
-  }; 
+  };
 
   useEffect(() => {
     handleGetOptionsTriggers();
-  }, [])
+  }, []);
 
   const handleGetOptionsChannels = async () => {
     try {
-      const response = await api.get('/channels');
-      console.log("channels", response.data);
-
-      const getOptionsFomattedChannels = response.data.map(item =>{
+      const response = await api.get("/channels");
+    
+      const getOptionsFomattedChannels = response.data.map((item) => {
         return {
           label: item.name,
           value: item.name,
         };
-      })
+      });
       setGetOptionsChannels(getOptionsFomattedChannels);
-
     } catch (error) {
-          toast.error(
-            "Erro ao tentar acessar o servidor preecione ctrl + f5 ou contate o suporte",
-            {
-              position: toast.POSITION.BOTTOM_CENTER,
-            }
-          );
-
+           Swal.fire({
+             icon: "error",
+             title: "Mensagem",
+             text: "Erro 404 /Channels contate o suporte",
+           });
     }
   };
 
   useEffect(() => {
     handleGetOptionsChannels();
-  }, [])
+  }, []);
 
-  const handlePostMessages = () => {
-  const aleatorio = Math.floor(Math.random() * 100);
-  console.log("resultado",aleatorio);
-
-  }
-
-  useEffect(() => {
-        handlePostMessages();
-  }, [])
+  const handlePostMessages = async () => {
+    try {
+      const response = await api.post("/messages", {
+        channel: optionSelectedCanal,
+        trigger: optionSelectedGatilho,
+        timer: timer,
+        message: messages,
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Mensagem",
+        text: "Ação realizado com sucesso",
+      });
+      console.log("Cadas post", response);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Mensagem",
+        text: "404 / MESSAGES confira os campos e tente novamente ou contate o suporte",
+      });
+    }
+  };
 
   const handleOnChangeGatilho = (event) => {
-    setOptionSelectedGatilho(event.target.value)
-  }
+    setOptionSelectedGatilho(event.target.value);
+  };
 
   const handleOnChangeCanal = (event) => {
     setOptionSelectedCanal(event.target.value);
-   };
-      
-   const notifySwal = (message) => {
-     Swal.fire({
-        icon: "error",
-        title: "Mensagem",
-        text: message,
-        footer: "<Criado por zap system",
-    });
   };
-      
 
   return (
     <>
       <div className="container_cadastro">
-        <div className="container_actions">
-          <h2>Messages</h2>
+        <div className="container_actions_cadastro">
+          <h2>Cadastro</h2>
           <div className="div_actions_button">
             <button onClick={() => history.goBack()}>Voltar</button>
 
-            <button
-              className="cadastro_btn2"
-              onClick={() => notifySwal("jjdjdjdjdjjdjdjdjdjdjdj")}
-            >
+            <button className="cadastro_btn2" onClick={handlePostMessages}>
               Cadastrar
             </button>
           </div>
@@ -155,7 +140,6 @@ const Register = () => {
           ></textarea>
         </div>
       </div>
-      <ToastContainer autoClose={false} />
     </>
   );
 };
