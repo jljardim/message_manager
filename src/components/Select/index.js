@@ -1,19 +1,17 @@
 const Select = ({titleLabel, options, value, onChange}) => {
     return (
       <>
-        <label>{titleLabel}</label>
+        <label className="label_select_message">{titleLabel}</label>
         <select value={value} onChange={onChange}>
-          
+          <option></option>
           {options.map((option) => (
             <>
-            <option></option>
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             </>
           ))}
         </select>
-        
       </>
     );
 }

@@ -100,11 +100,11 @@ const Message = () => {
         <div className="div_h2_message">
           <h2>Messages</h2>
           <div className="div_actions_button">
-            <button onClick={handleOnClick} className="btn2_messages">
+            <button onClick={handleOnClick} className="btn1_messages">
               Pesquisar
             </button>
             <Link to="/register">
-              <button>Nova mensagem</button>
+              <button className="btn2_messages">Nova mensagem</button>
             </Link>
           </div>
         </div>

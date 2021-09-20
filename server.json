@@ -50,18 +50,11 @@
       "id": 1631313726740
     },
     {
-      "channel": "sms",
-      "trigger": "recarregou_celular",
-      "timer": "16:50",
-      "message": "Recarga no valor de 20.00",
-      "id": 1631313726741
-    },
-    {
       "channel": "whatsapp",
-      "trigger": "fez_pix",
-      "timer": "16:50",
-      "message": "Pix com sucesso",
-      "id": 1631313726742
+      "trigger": "recarregou_celular",
+      "timer": "13:00",
+      "message": "Comprei algo",
+      "id": 1631313726741
     }
   ],
   "channels": [

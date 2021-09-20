@@ -8,10 +8,10 @@ const data = {
       label: "# of Votes",
       data: [50, 45, 40, 5, 2, 3],
       backgroundColor: [
-        "#0000CD",
+        "#00FA9A",
         "#1E90FF",
         "#0000CD",
-        "#1E90FF",
+        "#00FA9A",
         "#0000CD",
         "#1E90FF",
       ],

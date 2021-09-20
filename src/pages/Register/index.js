@@ -3,6 +3,17 @@ import { useHistory } from "react-router";
 import Select from "../../components/Select";
 import api from "../../services/api";
 import Swal from "sweetalert2";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  trigger: yup.string().required("Uma ação é obrigatoria"),
+  channel: yup.string().required("Um canal de comunicação é necessario"),
+  timer: yup
+    .string()
+    .required("Precisa estar no formato H(H...):MM (somente números)")
+    .matches(/^[0-9]+:[0-5][0-9]$/),
+  message: yup.string().required("Campo não pode ser vazio"),
+});
 
 const Register = () => {
   const [optionSelectedGatilho, setOptionSelectedGatilho] = useState("");
@@ -24,11 +35,11 @@ const Register = () => {
       });
       setGetOptionsTriggers(getOptionsFomattedTriggers);
     } catch (error) {
-     Swal.fire({
-       icon: "error",
-       title: "Mensagem",
-       text: "Erro 404 /Triggers contate o suporte",
-     });
+      Swal.fire({
+        icon: "error",
+        title: "Mensagem",
+        text: "Erro 404 /Triggers contate o suporte",
+      });
     }
   };
 
@@ -39,7 +50,7 @@ const Register = () => {
   const handleGetOptionsChannels = async () => {
     try {
       const response = await api.get("/channels");
-    
+
       const getOptionsFomattedChannels = response.data.map((item) => {
         return {
           label: item.name,
@@ -48,11 +59,11 @@ const Register = () => {
       });
       setGetOptionsChannels(getOptionsFomattedChannels);
     } catch (error) {
-           Swal.fire({
-             icon: "error",
-             title: "Mensagem",
-             text: "Erro 404 /Channels contate o suporte",
-           });
+      Swal.fire({
+        icon: "error",
+        title: "Mensagem",
+        text: "Erro 404 /Channels contate o suporte",
+      });
     }
   };
 
@@ -62,18 +73,21 @@ const Register = () => {
 
   const handlePostMessages = async () => {
     try {
-      const response = await api.post("/messages", {
+      const newMessage = {
         channel: optionSelectedCanal,
         trigger: optionSelectedGatilho,
         timer: timer,
         message: messages,
-      });
+      };
+      await schema.validate(newMessage);
+
+      await api.post("/messages", newMessage);
+
       Swal.fire({
         icon: "success",
         title: "Mensagem",
         text: "Ação realizado com sucesso",
       });
-      console.log("Cadas post", response);
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -96,8 +110,10 @@ const Register = () => {
       <div className="container_cadastro">
         <div className="container_actions_cadastro">
           <h2>Cadastro</h2>
-          <div className="div_actions_button">
-            <button onClick={() => history.goBack()}>Voltar</button>
+          <div className="div_actions_button_cadastro">
+            <button onClick={() => history.goBack()} className="cadastro_btn1">
+              Voltar
+            </button>
 
             <button className="cadastro_btn2" onClick={handlePostMessages}>
               Cadastrar
@@ -105,7 +121,7 @@ const Register = () => {
           </div>
         </div>
 
-        <div className="container_dados">
+        <div className="container_dados_cadastro">
           <div className="campo_cadastro">
             <Select
               titleLabel="Gatilho:"
